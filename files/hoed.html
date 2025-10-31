@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hats from 1900</title>
+    <style>
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+            padding: 1rem;
+        }
+        .image-item {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Hoeden met veren</h1>
+    <div id="imageContainer" class="image-grid"></div>
+
+    <script>
+        async function fetchImages() {
+            try {
+                const response = await fetch('https://api.vam.ac.uk/v2/objects/search?id_material=x35691&kw_object_type=Hat&page=1&page_size=15&q=&year_made_from=1890&year_made_to=1910');
+                const data = await response.json();
+                
+                const container = document.getElementById('imageContainer');
+                
+                data.records.forEach(record => {
+                    console.log(record);
+                    if (record._images._iiif_image_base_url){
+                        const img = document.createElement('img');
+                        img.src = record._images._iiif_image_base_url + '/full/400,/0/default.jpg';
+                        img.classList.add('image-item');
+                        img.alt = 'Historical children\'s dress';
+                        container.appendChild(img);
+                    }
+                });
+            } catch (error) {
+                console.error('Error fetching images:', error);
+            }
+        }
+
+        window.addEventListener('load', fetchImages);
+    </script>
+</body>
+</html>
