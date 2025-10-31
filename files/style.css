@@ -1,0 +1,49 @@
+body {
+  margin: 0;
+  overflow-x: hidden;
+}
+
+#sidebar {
+  position: fixed;
+  top: 0;
+  left: -20%;
+  width: 20%;
+  height: 100%;
+  background-color: white;
+  box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+  padding: 20px;
+  z-index: 1000;
+  opacity: 0;
+  pointer-events: none;
+  transition: left 0.3s ease, opacity 0.3s ease;
+}
+
+#sidebar.visible {
+  left: 0;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.image-container {
+  position: relative;
+  width: 100%;
+  display: inline-block;
+}
+
+.image-container img.main-image {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.shape {
+  position: absolute;
+  border: 2px solid red;
+  box-sizing: border-box;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.shape:hover {
+  background-color: rgba(255, 0, 0, 0.2);
+}
