@@ -10,16 +10,28 @@ $(document).ready(function () {
 
   function hideSidebar() {
     $("#sidebar").removeClass("visible");
-    $("#sidebar-text").text("Hover over a shape to see info.");
+    $("#sidebar-text").text("");
     isFrozen = false;
     activeShape = null;
   }
 
-  $(".shape").on("mouseenter", function () {
-    if (isFrozen) return;
-    const text = $(this).data("text");
-    $("#sidebar-text").text(text);
-    showSidebar();
+  $(".shape").on("mouseenter", function() {
+     clearTimeout(hideTimeout);
+     const OCCUPATION_API = 'https://api.rkd.triply.cc/queries/HackaLOD25/beroep/1/run?id=';
+     const IRI = $(this).data("text");
+     fetch(OCCUPATION_API+IRI)
+      .then(response => response.json())
+      .then(responseJson => {
+        responseJson.forEach((item, index) => {
+          const textField = $("#sidebar-text-" + (index + 1));
+          textField.text(item.beroep);
+        });
+      })
+      .catch(error => {
+         console.error('Error fetching data:', error);
+      });
+     $("#sidebar-text").text(IRI);
+     showSidebar();
   });
 
   $(".shape").on("mouseleave", function () {
