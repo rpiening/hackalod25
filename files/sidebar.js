@@ -48,6 +48,7 @@ function clearHighlights() {
     $("#sidebar-geboorte").text("");
     $("#sidebar-overlijden").text("");
     $("#sidebar-beroep").text("");
+    $("#sidebar-huwelijk").text("");
     $("#sidebar-text-1").text("");
     $("#sidebar-japon").empty();
     $("#sidebar-stola").empty();
