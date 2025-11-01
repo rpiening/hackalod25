@@ -4,81 +4,25 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>RKD Team</title>
-  <link rel="stylesheet" href="bootstrap-5.3.8-dist/css/bootstrap.css">
   <link rel="stylesheet" href="style.css">
   <script src="jquery-3.7.1.min.js"></script>
+  <script src="sidebar.js"></script>
 </head>
 <body>
   <div id="sidebar">
     <h3>Sidebar</h3>
-    <p id="sidebar-text">Placeholder text</p>
+    <p id="sidebar-text"></p>
+    <p id="sidebar-text-1"></p>
   </div>
 
   <div class="image-container">
     <img src="Google_Art_Project.jpg" alt="Artwork" class="main-image">
-    <div class="shape" data-text="Aleida" style="top: 15%; left: 25%; width: 25%; height: 45%;"></div>
-    <div class="shape" data-text="Zusje" style="top: 31%; left: 13%; width: 11%; height: 30%;"></div>
+    <div class="shape" data-text="https://data.rkd.nl/sitters/17744" style="top: 15%; left: 25%; width: 25%; height: 45%;"></div>
+    <div class="shape" data-text="https://data.rkd.nl/sitters/17771" style="top: 31%; left: 13%; width: 11%; height: 30%;"></div>
     <div class="shape" data-text="https://data.rkd.nl/sitters/17774" style="top: 25%; left: 25%; width: 12%; height: 17%;"></div>
-    <div class="shape" data-text="Miselle" style="top: 22%; left: 52%; width: 16%; height: 32%;"></div>
-    <div class="shape" data-text="Toetie" style="top: 41%; left: 64%; width: 15%; height: 25%;"></div>
-    <div class="shape" data-text="Kees" style="top: 30%; left: 77%; width: 15%; height: 25%;"></div>
+    <div class="shape" data-text="https://data.rkd.nl/sitters/17770" style="top: 22%; left: 52%; width: 16%; height: 32%;"></div>
+    <div class="shape" data-text="https://data.rkd.nl/sitters/17772" style="top: 41%; left: 64%; width: 15%; height: 25%;"></div>
+    <div class="shape" data-text="https://data.rkd.nl/sitters/17773" style="top: 30%; left: 77%; width: 15%; height: 25%;"></div>
   </div>
-
-  <script>
-   
-  $(document).ready(function() {
-    let hideTimeout;
-
-    function showSidebar() {
-      clearTimeout(hideTimeout);
-      $("#sidebar").addClass("visible");
-    }
-
-    function hideSidebar() {
-      $("#sidebar").removeClass("visible");
-      $("#sidebar-text").text("Hover over a shape to see info.");
-    }
-
-    $(".shape").on("mouseenter", function() {
-      clearTimeout(hideTimeout);
-      const OCCUPATION_API = 'https://api.rkd.triply.cc/queries/HackaLOD25/beroep/1/run?id=';
-      const IRI = $(this).data("text");
-      fetch(OCCUPATION_API+IRI)
-        .then(response => response.json())
-        .then(responseJson => {
-            for (let {beroep} of responseJson) {
-              console.log(beroep);  
-                $("#sidebar-text").text(beroep);
-            }
-        })
-        .catch(error => {
-            console.error('Error fetching data:', error);
-        });
-      $("#sidebar-text").text(IRI);
-      showSidebar();
-    });
-
-    $(".shape").on("mouseleave", function() {
-      hideTimeout = setTimeout(() => {
-        if (!$(".shape:hover").length && !$("#sidebar").is(":hover")) {
-          hideSidebar();
-        }
-      }, 200);
-    });
-
-    $("#sidebar").on("mouseenter", function() {
-      clearTimeout(hideTimeout);
-      showSidebar();
-    });
-
-    $("#sidebar").on("mouseleave", function() {
-      hideTimeout = setTimeout(() => {
-        if (!$(".shape:hover").length) {
-          hideSidebar();
-        }
-      }, 200);
-    });
-  });
-</script>
 </body>
 </html>
