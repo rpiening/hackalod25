@@ -1,6 +1,17 @@
 body {
   margin: 0;
   overflow-x: hidden;
+  font-family: sans-serif;
+}
+
+h3 {
+  font-size: 25px;
+}
+
+p {
+  font-size: 14px;
+  padding-left: 20px;
+  line-height: 21px;
 }
 
 #sidebar {
@@ -16,6 +27,7 @@ body {
   opacity: 0;
   pointer-events: none;
   transition: left 0.3s ease, opacity 0.3s ease;
+  filter: drop-shadow(7px 7px 15px #000000);
 }
 
 #sidebar.visible {
