@@ -32,9 +32,18 @@ $(document).ready(function () {
      if($(this).data("text") != "https://data.rkd.nl/sitters/17744" && $(this).data("text") != "https://data.rkd.nl/sitters/17774") {
         $("#sidebar-kinderjurk").html('Deze dochter draagt een jurk. <a href="kinderjurk.html">Vergelijkbare kinderjurken in Europeana</a>')
      };
-
+     const NAME_API = 'https://api.rkd.triply.cc/queries/HackaLOD25/this-person/2/run?id=';
      const OCCUPATION_API = 'https://api.rkd.triply.cc/queries/HackaLOD25/beroep/1/run?id=';
      const IRI = $(this).data("text");
+
+    //   naam
+     fetch(NAME_API+IRI)
+      .then(response => response.json())
+      .then(responseJson => { responseJson.forEach(item => {  
+        $("#sidebar-naam").text(item.nameRKD);
+      })});
+
+    //  beroep
      fetch(OCCUPATION_API+IRI)
       .then(response => response.json())
       .then(responseJson => {
@@ -46,6 +55,8 @@ $(document).ready(function () {
       .catch(error => {
          console.error('Error fetching data:', error);
       });
+
+
      $("#sidebar-text").text(IRI);
      showSidebar();
   });
