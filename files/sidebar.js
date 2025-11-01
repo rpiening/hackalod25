@@ -68,13 +68,6 @@ $(document).ready(function () {
 
     //  overlijdensdatum
       fetch(DEATH_API+IRI)
-      // .then(response => response.json())
-      // .then(responseJson => { responseJson.forEach(item => {  
-      //   $("#sidebar-overlijden").text("Overlijdensdatum in de RKDdatabases: "+item.death_date+" te "+item.death_place );
-      // })})
-      // .then(responseJson => { responseJson.forEach(item => { 
-      //     $("#sidebar-overlijden-2").text(item.source);
-      // })});
       .then(response => response.json())
       .then(data => {
         if (Array.isArray(data) && data.length) {
@@ -89,11 +82,20 @@ $(document).ready(function () {
 
     //  beroep
      fetch(OCCUPATION_API+IRI)
+      // .then(response => response.json())
+      // .then(data => {
+      //   data.forEach((item, index) => $("#sidebar-text-" + (index + 1)).text(item.beroep));
+      // })
+      // .catch(error => console.error('Error fetching data:', error));
       .then(response => response.json())
       .then(data => {
-        data.forEach((item, index) => $("#sidebar-text-" + (index + 1)).text(item.beroep));
+        if (Array.isArray(data) && data.length) {
+          data.forEach(item => {
+            if (item.beroep) addListItem('#sidebar-beroep', "Beroep: " + (item.beroep));
+            if (item.source) addListItem('#sidebar-beroep', "<a href=\""+ item.source + "\">Archiefstuk van deze gebeurtenis</a>");
+          });
+        }
       })
-      .catch(error => console.error('Error fetching data:', error));
 
     $("#sidebar-text").text(IRI);
     showSidebar();
