@@ -3,6 +3,39 @@ $(document).ready(function () {
   let isFrozen = false;
   let activeShape = null;
 
+const shapeImageMap = {
+  "https://data.rkd.nl/sitters/17771": ".Zus",
+  "https://data.rkd.nl/sitters/17774": ".Piet",
+  "https://data.rkd.nl/sitters/17744": ".Aleida",
+  "https://data.rkd.nl/sitters/17770": ".Miselle",
+  "https://data.rkd.nl/sitters/17772": ".Toetie",
+  "https://data.rkd.nl/sitters/17773": ".Kees"
+};
+
+// --- Highlight functions ---
+function highlightImage(IRI, clicked = false) {
+  $(".shape-image").removeClass("highlighted blurred");
+  const selector = shapeImageMap[IRI];
+  if (!selector) return;
+
+  // Highlight corresponding person image
+  $(selector).addClass("highlighted");
+
+  if (clicked) {
+    // Clicked state: darker overlay + blur others
+    $("#overlay").css("background-color", "rgba(0,0,0,0.5)");
+    $(".shape-image").not(selector).addClass("blurred");
+  } else {
+    // Hover state: lighter overlay
+    $("#overlay").css("background-color", "rgba(0,0,0,0.35)");
+  }
+}
+
+function clearHighlights() {
+  $("#overlay").css("background-color", "rgba(0,0,0,0)");
+  $(".shape-image").removeClass("highlighted blurred");
+}
+
   function showSidebar() {
     clearTimeout(hideTimeout);
     $("#sidebar").addClass("visible");
@@ -42,7 +75,7 @@ $(document).ready(function () {
 
     //  als je Aleida aanklikt
     if (IRI === "https://data.rkd.nl/sitters/17744") {
-      $("#sidebar-huwelijk").html('Aleida was getrouwd met <a href="vader.html">Henricus Joannes van Ogtrop</a>');
+      $("#sidebar-huwelijk").html('Aleida was getrouwd met <a href="vader.html">Henricus Joannes van Ogtrop</a>'); 
       $("#sidebar-japon").html('Aleida draagt een japon. <a href="japon.html">Vergelijkbare japonnen in het V&A museum</a>');
       $("#sidebar-stola").html('Aleida draagt een stola. <a href="stola.html">Vergelijkbare stola\'s in het V&A museum</a>');
       $("#sidebar-hoed").html('Aleida draagt een hoed met veren. <a href="hoed.html">Vergelijkbare hoeden in het V&A museum</a>');
@@ -101,20 +134,23 @@ $(document).ready(function () {
     showSidebar();
   }
 
-  $(".shape").on("mouseenter", function () {
-    if (isFrozen) return;
-    clearTimeout(hideTimeout);
-    updateSidebarInfo(this);
-  });
+$(".shape").on("mouseenter", function () {
+  if (isFrozen) return;
+  clearTimeout(hideTimeout);
+  const IRI = $(this).data("text");
+  highlightImage(IRI, false);
+  updateSidebarInfo(this);
+});
 
-  $(".shape").on("mouseleave", function () {
-    if (isFrozen) return;
-    hideTimeout = setTimeout(() => {
-      if (!$(".shape:hover").length && !$("#sidebar").is(":hover")) {
-        hideSidebar();
-      }
-    }, 200);
-  });
+$(".shape").on("mouseleave", function () {
+  if (isFrozen) return;
+  clearHighlights();
+  hideTimeout = setTimeout(() => {
+    if (!$(".shape:hover").length && !$("#sidebar").is(":hover")) {
+      hideSidebar();
+    }
+  }, 200);
+});
 
   $("#sidebar").on("mouseenter", function () {
     if (isFrozen) return;
@@ -129,27 +165,38 @@ $(document).ready(function () {
     }, 200);
   });
 
-  $(".shape").on("click", function (e) {
-    e.stopPropagation();
+$(".shape").on("click", function (e) {
+  e.stopPropagation();
+  const IRI = $(this).data("text");
 
-    if (activeShape !== this) {
-      activeShape = this;
-      updateSidebarInfo(this);
+  if (activeShape !== this) {
+    activeShape = this;
+    updateSidebarInfo(this);
+  }
+
+  isFrozen = true;
+  highlightImage(IRI, true);
+  showSidebar();
+});
+
+$(document).on("click", function (e) {
+  if (isFrozen) {
+    const isShape = $(e.target).closest(".shape").length > 0;
+    const isSidebar = $(e.target).closest("#sidebar").length > 0;
+    if (!isShape && !isSidebar) {
+      isFrozen = false;
+      activeShape = null;
+      clearHighlights();
+      hideSidebar();
     }
+  }
+});
 
-    isFrozen = true;
-    showSidebar();
-  });
-
-  $(document).on("click", function (e) {
-    if (isFrozen) {
-      const isShape = $(e.target).closest(".shape").length > 0;
-      const isSidebar = $(e.target).closest("#sidebar").length > 0;
-      if (!isShape && !isSidebar) hideSidebar();
-    }
-  });
-
-  $(document).on("contextmenu", function (e) {
-    if (isFrozen) hideSidebar();
-  });
+$(document).on("contextmenu", function (e) {
+  e.preventDefault();
+  isFrozen = false;
+  activeShape = null;
+  clearHighlights();
+  hideSidebar();
+});
 });
