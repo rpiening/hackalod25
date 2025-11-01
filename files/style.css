@@ -50,12 +50,46 @@ p {
 
 .shape {
   position: absolute;
-  border: 2px solid red;
+  border: none;
   box-sizing: border-box;
   cursor: pointer;
   transition: background-color 0.2s ease;
+  z-index: 5;
 }
 
-.shape:hover {
-  background-color: rgba(255, 0, 0, 0.2);
+.shape-image {
+  width: 80%;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+}
+
+#overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0);
+  pointer-events: none;
+  z-index: 3;
+  transition: background-color 0.3s ease;
+}
+
+.shape-image {
+  width: 80%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transition: all 0.3s ease;
+  z-index: 1;
+  filter: none;
+}
+
+.shape-image.highlighted {
+  z-index: 4;
+}
+
+.shape-image.blurred {
+  filter: blur(4px);
 }
