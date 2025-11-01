@@ -93,3 +93,56 @@ p {
 .shape-image.blurred {
   filter: blur(4px);
 }
+
+/* Image galleries */
+
+h1 {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-top: 2rem;
+  letter-spacing: 1px;
+  color: #222;
+}
+
+/* Main image grid layout */
+.image-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Each image tile */
+.image-item {
+  width: 100%;
+  height: 280px;
+  object-fit: cover;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease;
+  cursor: pointer;
+}
+
+/* Hover interaction */
+.image-item:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  filter: brightness(1.05);
+}
+
+/* Optional subtle zoom effect on hover */
+.image-item:hover {
+  transform: scale(1.03);
+}
+
+/* Responsive tweak for small screens */
+@media (max-width: 600px) {
+  .image-item {
+    height: 200px;
+  }
+  h1 {
+    font-size: 1.8rem;
+  }
+}
