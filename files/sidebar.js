@@ -11,12 +11,28 @@ $(document).ready(function () {
   function hideSidebar() {
     $("#sidebar").removeClass("visible");
     $("#sidebar-text").text("");
+    $("#sidebar-japon").empty();
+    $("#sidebar-stola").empty();
+    $("#sidebar-hoed").empty();
+    $("#sidebar-ketting").empty();
+    $("#sidebar-kinderjurk").empty();
     isFrozen = false;
     activeShape = null;
   }
 
   $(".shape").on("mouseenter", function() {
      clearTimeout(hideTimeout);
+    //  als je Aleida aanklikt
+     if($(this).data("text") == "https://data.rkd.nl/sitters/17744") {
+        $("#sidebar-japon").html('Aleida draagt een japon. <a href="japon.html">Vergelijkbare japonnen in het V&A museum</a>')
+        $("#sidebar-stola").html('Aleida draagt een stola. <a href="stola.html">Vergelijkbare stola\'s in het V&A museum</a>')
+        $("#sidebar-hoed").html('Aleida draagt een hoed met veren. <a href="hoed.html">Vergelijkbare hoeden in het V&A museum</a>')
+        $("#sidebar-ketting").html('Aleida draagt een parelketting. <a href="parelketting.html">Vergelijkbare kettingen in het V&A museum</a>')
+     };
+     if($(this).data("text") != "https://data.rkd.nl/sitters/17744" && $(this).data("text") != "https://data.rkd.nl/sitters/17774") {
+        $("#sidebar-kinderjurk").html('Deze dochter draagt een jurk. <a href="kinderjurk.html">Vergelijkbare kinderjurken in Europeana</a>')
+     };
+
      const OCCUPATION_API = 'https://api.rkd.triply.cc/queries/HackaLOD25/beroep/1/run?id=';
      const IRI = $(this).data("text");
      fetch(OCCUPATION_API+IRI)

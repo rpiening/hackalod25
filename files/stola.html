@@ -26,16 +26,16 @@
     <script>
         async function fetchImages() {
             try {
-                const response = await fetch('https://api.europeana.eu/record/v2/search.json?query=black%20lace%20stole&media=true&wskey=lulcombou');
+                const response = await fetch('https://api.vam.ac.uk/v2/objects/search?kw_object_type=Stole&page=1&page_size=15&q=lace&year_made_from=1890&year_made_to=1910');
                 const data = await response.json();
                 
                 const container = document.getElementById('imageContainer');
                 
-                data.items.forEach(item => {
-                    console.log(item);
-                    if (item.edmPreview) {
+                data.records.forEach(record => {
+                    console.log(record);
+                    if (record._images._iiif_image_base_url){
                         const img = document.createElement('img');
-                        img.src = item.edmPreview[0];
+                        img.src = record._images._iiif_image_base_url + '/full/400,/0/default.jpg';
                         img.classList.add('image-item');
                         img.alt = 'Historical children\'s dress';
                         container.appendChild(img);
