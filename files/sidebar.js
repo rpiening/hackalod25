@@ -34,6 +34,7 @@ $(document).ready(function () {
      };
      const NAME_API = 'https://api.rkd.triply.cc/queries/HackaLOD25/this-person/run?id=';
      const BIRTH_API = 'https://api.rkd.triply.cc/queries/HackaLOD25/birth/run?id=';
+     const DEATH_API = 'https://api.rkd.triply.cc/queries/HackaLOD25/death/run?id=';
      const OCCUPATION_API = 'https://api.rkd.triply.cc/queries/HackaLOD25/beroep/run?id=';
      const IRI = $(this).data("text");
 
@@ -49,6 +50,16 @@ $(document).ready(function () {
       .then(response => response.json())
       .then(responseJson => { responseJson.forEach(item => {  
         $("#sidebar-geboorte").text("Geboortedatum in de RKDdatabases: "+item.birth_date+" te "+item.birth_place);
+      })});
+
+    //  overlijdensdatum
+      fetch(DEATH_API+IRI)
+      .then(response => response.json())
+      .then(responseJson => { responseJson.forEach(item => {  
+        $("#sidebar-overlijden").text("Overlijdensdatum in de RKDdatabases: "+item.death_date+" te "+item.death_place );
+      })})
+      .then(responseJson => { responseJson.forEach(item => { 
+          $("#sidebar-overlijden-2").text(item.source);
       })});
 
     //  beroep
