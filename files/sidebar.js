@@ -48,6 +48,7 @@ function clearHighlights() {
     $("#sidebar-geboorte").text("");
     $("#sidebar-overlijden").text("");
     $("#sidebar-beroep").text("");
+    $("#sidebar-huwelijk").text("");
     $("#sidebar-text-1").text("");
     $("#sidebar-japon").empty();
     $("#sidebar-stola").empty();
@@ -63,14 +64,14 @@ function clearHighlights() {
     const $container = $(containerSelector);
     // ensure the container holds a UL to keep semantics; create if missing
     if ($container.children('ul').length === 0) {
-      $container.empty().append('<ul class="sidebar-list"></ul>');
+      $container.empty().append('<ul class="sidebar-list" style="list-style-type:none;"></ul>');
     }
     $container.children('ul').append($('<li>').html(html));
   }
 
   function updateSidebarInfo(shape) {
     const IRI = $(shape).data("text");
-    $("#sidebar-naam, #sidebar-geboorte, #sidebar-overlijden, #sidebar-beroep, #sidebar-text-1").empty();
+    $("#sidebar-naam, #sidebar-geboorte, #sidebar-overlijden, #sidebar-huwelijk, #sidebar-beroep, #sidebar-text-1").empty();
     $("#sidebar-japon, #sidebar-stola, #sidebar-hoed, #sidebar-ketting, #sidebar-kinderjurk").empty();
 
     //  als je Aleida aanklikt
@@ -97,7 +98,14 @@ function clearHighlights() {
     // geboortedatum
     fetch(BIRTH_API + IRI)
       .then(response => response.json())
-      .then(data => { data.forEach(item => $("#sidebar-geboorte").text("Geboortedatum in de RKDdatabases: " + item.birth_date + " te " + item.birth_place)); });
+      .then(data => {
+         if (Array.isArray(data) && data.length) {
+          data.forEach(item => {
+            if (item.birth_date) addListItem('#sidebar-geboorte', "Geboortedatum in de RKDdatabases: " + (item.birth_date || '') + (item.birth_place ? " te " + item.birth_place : ""));
+            if (item.source) addListItem('#sidebar-geboorte', "<a href=\""+ item.source + "\">Archiefstuk van deze gebeurtenis</a>");
+          });
+        }
+      })
 
     //  overlijdensdatum
       fetch(DEATH_API+IRI)
