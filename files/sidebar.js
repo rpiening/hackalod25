@@ -25,6 +25,16 @@ $(document).ready(function () {
     activeShape = null;
   }
 
+  // helper to append an <li> into a container (container can be any element)
+  function addListItem(containerSelector, html) {
+    const $container = $(containerSelector);
+    // ensure the container holds a UL to keep semantics; create if missing
+    if ($container.children('ul').length === 0) {
+      $container.empty().append('<ul class="sidebar-list"></ul>');
+    }
+    $container.children('ul').append($('<li>').html(html));
+  }
+
   function updateSidebarInfo(shape) {
     const IRI = $(shape).data("text");
     $("#sidebar-naam, #sidebar-geboorte, #sidebar-overlijden, #sidebar-beroep, #sidebar-text-1").empty();
@@ -58,13 +68,24 @@ $(document).ready(function () {
 
     //  overlijdensdatum
       fetch(DEATH_API+IRI)
+      // .then(response => response.json())
+      // .then(responseJson => { responseJson.forEach(item => {  
+      //   $("#sidebar-overlijden").text("Overlijdensdatum in de RKDdatabases: "+item.death_date+" te "+item.death_place );
+      // })})
+      // .then(responseJson => { responseJson.forEach(item => { 
+      //     $("#sidebar-overlijden-2").text(item.source);
+      // })});
       .then(response => response.json())
-      .then(responseJson => { responseJson.forEach(item => {  
-        $("#sidebar-overlijden").text("Overlijdensdatum in de RKDdatabases: "+item.death_date+" te "+item.death_place );
-      })})
-      .then(responseJson => { responseJson.forEach(item => { 
-          $("#sidebar-overlijden-2").text(item.source);
-      })});
+      .then(data => {
+        if (Array.isArray(data) && data.length) {
+          data.forEach(item => {
+            if (item.death_date) addListItem('#sidebar-overlijden', "Overlijdensdatum in de RKDdatabases: " + (item.death_date || '') + (item.death_place ? " te " + item.death_place : ""));
+            if (item.source) addListItem('#sidebar-overlijden', "<a href=\""+ item.source + "\">Archiefstuk van deze gebeurtenis</a>");
+          });
+        }
+      })
+      .catch(() => addListItem('#sidebar-overlijden', 'Fout bij ophalen overlijdensgegevens'));
+
 
     //  beroep
      fetch(OCCUPATION_API+IRI)
