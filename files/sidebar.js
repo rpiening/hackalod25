@@ -32,8 +32,9 @@ $(document).ready(function () {
      if($(this).data("text") != "https://data.rkd.nl/sitters/17744" && $(this).data("text") != "https://data.rkd.nl/sitters/17774") {
         $("#sidebar-kinderjurk").html('Deze dochter draagt een jurk. <a href="kinderjurk.html">Vergelijkbare kinderjurken in Europeana</a>')
      };
-     const NAME_API = 'https://api.rkd.triply.cc/queries/HackaLOD25/this-person/2/run?id=';
-     const OCCUPATION_API = 'https://api.rkd.triply.cc/queries/HackaLOD25/beroep/1/run?id=';
+     const NAME_API = 'https://api.rkd.triply.cc/queries/HackaLOD25/this-person/run?id=';
+     const BIRTH_API = 'https://api.rkd.triply.cc/queries/HackaLOD25/birth/run?id=';
+     const OCCUPATION_API = 'https://api.rkd.triply.cc/queries/HackaLOD25/beroep/run?id=';
      const IRI = $(this).data("text");
 
     //   naam
@@ -41,6 +42,13 @@ $(document).ready(function () {
       .then(response => response.json())
       .then(responseJson => { responseJson.forEach(item => {  
         $("#sidebar-naam").text(item.nameRKD);
+      })});
+
+    // geboortedatum
+     fetch(BIRTH_API+IRI)
+      .then(response => response.json())
+      .then(responseJson => { responseJson.forEach(item => {  
+        $("#sidebar-geboorte").text("Geboortedatum in de RKDdatabases: "+item.birth_date+" te "+item.birth_place);
       })});
 
     //  beroep
