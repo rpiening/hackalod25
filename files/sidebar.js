@@ -32,6 +32,7 @@ $(document).ready(function () {
 
     //  als je Aleida aanklikt
     if (IRI === "https://data.rkd.nl/sitters/17744") {
+      $("#sidebar-huwelijk").html('Aleida was getrouwd met <a href="vader.html">Henricus Joannes van Ogtrop</a>');
       $("#sidebar-japon").html('Aleida draagt een japon. <a href="japon.html">Vergelijkbare japonnen in het V&A museum</a>');
       $("#sidebar-stola").html('Aleida draagt een stola. <a href="stola.html">Vergelijkbare stola\'s in het V&A museum</a>');
       $("#sidebar-hoed").html('Aleida draagt een hoed met veren. <a href="hoed.html">Vergelijkbare hoeden in het V&A museum</a>');
